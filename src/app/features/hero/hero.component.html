@@ -1,0 +1,71 @@
+<section
+  [id]="ids.hero"
+  class="relative flex min-h-[100svh] items-center justify-center overflow-hidden bg-ink text-ivory"
+>
+  <!-- Background with parallax + slow zoom -->
+  <div class="absolute inset-0 overflow-hidden">
+    <div class="absolute inset-[-10%] will-change-transform" appParallax="0.18">
+      <img
+        [src]="config().hero.backgroundImage"
+        alt=""
+        fetchpriority="high"
+        decoding="async"
+        class="h-full w-full object-cover animate-slow-zoom"
+      />
+    </div>
+    <div class="absolute inset-0 bg-gradient-to-b from-ink/45 via-ink/25 to-ink/80"></div>
+  </div>
+
+  <!-- Content -->
+  <div class="container-luxe relative z-10 flex flex-col items-center py-32 text-center sm:py-40">
+    <p class="eyebrow !text-champagne" appReveal="fade">{{ config().hero.eyebrow }}</p>
+
+    <h1
+      class="mt-8 heading-display !text-ivory text-5xl sm:text-7xl lg:text-8xl text-balance"
+      appReveal
+      [revealDelay]="150"
+    >
+      {{ couple()[0].shortName }}
+    </h1>
+    <span
+      class="my-1 font-script text-6xl sm:text-8xl text-gold-light sm:my-2"
+      aria-hidden="true"
+      appReveal="scale"
+      [revealDelay]="300"
+    >
+      &amp;
+    </span>
+    <h1
+      class="heading-display !text-ivory text-5xl sm:text-7xl lg:text-8xl text-balance"
+      appReveal
+      [revealDelay]="450"
+    >
+      {{ couple()[1].shortName }}
+    </h1>
+
+    <p
+      class="mt-10 max-w-xl font-serif italic text-xl text-champagne sm:text-2xl text-balance"
+      appReveal
+      [revealDelay]="600"
+    >
+      {{ config().hero.invitation }}
+    </p>
+
+    <div class="mt-10 flex items-center gap-5" appReveal [revealDelay]="750">
+      <span class="h-px w-10 bg-champagne/60 sm:w-14"></span>
+      <p class="font-sans text-sm tracking-[0.35em] text-ivory sm:text-base">{{ config().wedding.displayDate }}</p>
+      <span class="h-px w-10 bg-champagne/60 sm:w-14"></span>
+    </div>
+  </div>
+
+  <!-- Scroll hint -->
+  <a
+    [href]="'#' + ids.saveTheDate"
+    class="absolute bottom-8 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-3 text-champagne/80 transition-colors hover:text-ivory"
+  >
+    <span class="eyebrow !text-[0.6rem] !text-current">{{ config().hero.scrollHint }}</span>
+    <span class="relative h-10 w-px overflow-hidden bg-champagne/30">
+      <span class="absolute inset-x-0 top-0 h-4 bg-champagne animate-scroll-hint"></span>
+    </span>
+  </a>
+</section>

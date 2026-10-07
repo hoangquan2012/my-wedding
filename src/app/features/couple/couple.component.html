@@ -1,0 +1,57 @@
+<section [id]="ids.couple" class="relative overflow-hidden bg-ivory py-24 sm:py-32">
+  <div class="container-luxe">
+    <app-section-heading [eyebrow]="copy().eyebrow" [title]="copy().title" />
+
+    <div class="relative mt-20 grid gap-20 md:grid-cols-2 md:gap-12 lg:gap-24">
+      <!-- Central ampersand (desktop) -->
+      <span
+        class="pointer-events-none absolute left-1/2 top-[14%] hidden -translate-x-1/2 -translate-y-1/2 font-script text-[8rem] leading-none text-champagne-dark/70 md:block lg:text-[10rem]"
+        aria-hidden="true"
+        appReveal="scale"
+      >
+        &amp;
+      </span>
+
+      @for (person of couple(); track person.role; let i = $index) {
+        <article class="flex flex-col items-center text-center" [appReveal]="i === 0 ? 'left' : 'right'" [revealDelay]="i * 120">
+          <!-- Arch portrait -->
+          <div class="group relative w-full max-w-[22rem]">
+            <div
+              class="pointer-events-none absolute inset-0 -translate-x-3 translate-y-3 rounded-t-[999px] border border-gold/50 transition-transform duration-700 ease-luxe group-hover:-translate-x-4 group-hover:translate-y-4"
+              aria-hidden="true"
+            ></div>
+            <div class="relative overflow-hidden rounded-t-[999px]">
+              <app-img
+                [src]="person.photo"
+                [alt]="person.fullName"
+                position="center top"
+                class="aspect-[4/5] w-full transition-transform duration-[1200ms] ease-luxe group-hover:scale-105"
+              />
+            </div>
+          </div>
+
+          <p class="eyebrow mt-10">{{ roleLabel(person) }} <span class="mx-1 text-champagne-dark">·</span> {{ roleLabelVi(person) }}</p>
+          <h3 class="heading-display mt-4 text-3xl sm:text-4xl">{{ person.fullName }}</h3>
+
+          @if (person.parents?.length) {
+            <p class="mt-3 font-serif italic text-base text-mocha sm:text-lg">
+              Con của {{ person.parents!.join(' & ') }}
+            </p>
+          }
+
+          <p class="mt-5 max-w-sm font-sans text-[0.95rem] leading-relaxed text-cocoa/80">{{ person.bio }}</p>
+
+          @if (person.social?.length) {
+            <div class="mt-5 flex gap-4">
+              @for (link of person.social; track link.url) {
+                <a [href]="link.url" target="_blank" rel="noopener noreferrer" class="font-sans text-xs uppercase tracking-wide2 text-gold hover:text-gold-dark">
+                  {{ link.label }}
+                </a>
+              }
+            </div>
+          }
+        </article>
+      }
+    </div>
+  </div>
+</section>

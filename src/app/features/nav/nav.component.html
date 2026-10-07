@@ -1,0 +1,82 @@
+<header class="fixed inset-x-0 top-0 z-[60] transition-all duration-500 ease-luxe" [class]="headerClass()">
+  <nav class="container-luxe flex h-16 items-center justify-between sm:h-[4.5rem]" aria-label="Điều hướng">
+    <a
+      href="#hero"
+      class="font-display text-xl tracking-[0.18em] sm:text-2xl"
+      (click)="scrollTo('hero', $event)"
+      aria-label="Về đầu trang"
+    >
+      {{ monogram() }}
+    </a>
+
+    <!-- Desktop links -->
+    <ul class="hidden items-center gap-7 lg:flex">
+      @for (link of links(); track link.id) {
+        <li>
+          <a
+            [href]="'#' + link.id"
+            class="group relative py-2 font-sans text-[0.72rem] uppercase tracking-wide2 transition-opacity hover:opacity-100"
+            [class.opacity-70]="activeId() !== link.id"
+            (click)="scrollTo(link.id, $event)"
+          >
+            {{ link.label }}
+            <span
+              class="absolute inset-x-0 -bottom-0.5 h-px origin-left bg-gold transition-transform duration-500 ease-luxe group-hover:scale-x-100"
+              [class.scale-x-100]="activeId() === link.id"
+              [class.scale-x-0]="activeId() !== link.id"
+            ></span>
+          </a>
+        </li>
+      }
+    </ul>
+
+    <div class="hidden items-center gap-3 lg:flex">
+      <span class="h-px w-6 bg-current opacity-40"></span>
+      <span class="font-serif text-sm tracking-[0.25em]">{{ displayDate() }}</span>
+    </div>
+
+    <!-- Mobile toggle -->
+    <button
+      type="button"
+      class="relative z-[70] inline-flex h-11 w-11 items-center justify-center lg:hidden"
+      (click)="toggleMenu()"
+      [attr.aria-expanded]="menuOpen()"
+      aria-controls="mobile-menu"
+      [attr.aria-label]="menuOpen() ? 'Đóng menu' : 'Mở menu'"
+    >
+      <app-icon [name]="menuOpen() ? 'close' : 'menu'" [size]="24" />
+    </button>
+  </nav>
+
+  <!-- Mobile menu -->
+  @if (menuOpen()) {
+    <div
+      id="mobile-menu"
+      class="fixed inset-0 z-[65] flex flex-col bg-ivory text-ink lg:hidden"
+      @menu
+    >
+      <div class="flex h-16 shrink-0 items-center px-5 sm:px-8">
+        <span class="font-display text-xl tracking-[0.18em]">{{ monogram() }}</span>
+      </div>
+
+      <ul class="flex flex-1 flex-col items-center justify-center gap-6 px-6 text-center">
+        @for (link of links(); track link.id; let i = $index) {
+          <li class="animate-fade-up" [style.animation-delay.ms]="120 + i * 60">
+            <a
+              [href]="'#' + link.id"
+              class="font-display text-3xl sm:text-4xl transition-colors"
+              [class.text-gold]="activeId() === link.id"
+              (click)="scrollTo(link.id, $event)"
+            >
+              {{ link.label }}
+            </a>
+          </li>
+        }
+      </ul>
+
+      <p class="shrink-0 pb-10 text-center font-serif italic text-mocha" style="padding-bottom: max(2.5rem, env(safe-area-inset-bottom))">
+        {{ displayDate() }}
+      </p>
+    </div>
+  }
+</header>

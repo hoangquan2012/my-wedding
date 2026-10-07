@@ -1,0 +1,59 @@
+@if (store.config(); as config) {
+  @if (store.couple(); as couple) {
+    <main>
+      <app-hero [config]="config" [couple]="couple" />
+
+      <app-save-the-date
+        [config]="config"
+        [copy]="config.sections.saveTheDate"
+        [location]="store.venue()?.address ?? ''"
+      />
+
+      <app-our-story [copy]="config.sections.story" [milestones]="store.story()" />
+
+      <app-couple [copy]="config.sections.couple" [couple]="couple" />
+
+      @defer (on viewport; prefetch on idle) {
+        <app-gallery [copy]="config.sections.gallery" [categories]="store.photoCategories()" />
+      } @placeholder {
+        <div class="min-h-[70vh] bg-ivory"></div>
+      }
+
+      <app-featured-photo [featured]="config.featured" />
+
+      <app-events [copy]="config.sections.events" [events]="store.events()" />
+
+      <app-day-timeline [copy]="config.sections.timeline" [items]="store.dayTimeline()" />
+
+      @if (store.venue(); as venue) {
+        @defer (on viewport; prefetch on idle) {
+          <app-venue [copy]="config.sections.venue" [venue]="venue" [events]="store.events()" />
+        } @placeholder {
+          <div class="min-h-[70vh] bg-cream"></div>
+        }
+      }
+
+      <app-dress-code [dressCode]="config.dressCode" />
+
+      @defer (on viewport; prefetch on idle) {
+        <app-gifts [gift]="config.gift" [accounts]="store.bankAccounts()" />
+      } @placeholder {
+        <div class="min-h-[60vh] bg-cream"></div>
+      }
+
+      @defer (on viewport; prefetch on idle) {
+        <app-rsvp [rsvp]="config.rsvp" [events]="store.events()" />
+      } @placeholder {
+        <div class="min-h-[60vh] bg-ivory"></div>
+      }
+
+      @defer (on viewport; prefetch on idle) {
+        <app-wishes [wishesCopy]="config.wishes" />
+      } @placeholder {
+        <div class="min-h-[60vh] bg-cream"></div>
+      }
+
+      <app-footer [config]="config" [couple]="couple" />
+    </main>
+  }
+}

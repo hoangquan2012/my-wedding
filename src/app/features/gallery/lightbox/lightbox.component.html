@@ -1,0 +1,89 @@
+<div
+  class="fixed inset-0 z-[95] flex flex-col bg-ink/95 text-ivory backdrop-blur-sm"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Xem ảnh"
+  style="padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom)"
+>
+  <!-- Top bar -->
+  <div class="flex shrink-0 items-center justify-between px-4 py-3 sm:px-6">
+    <p class="font-serif text-base tabular-nums tracking-wide2 sm:text-lg">
+      {{ index() + 1 }} <span class="text-champagne/50">/</span> {{ count() }}
+    </p>
+
+    <div class="flex items-center gap-1">
+      <button
+        type="button"
+        class="inline-flex h-11 w-11 items-center justify-center rounded-full text-ivory/80 transition-colors hover:bg-ivory/10 hover:text-ivory"
+        (click)="toggleZoom()"
+        [attr.aria-label]="zoomed() ? 'Thu nhỏ' : 'Phóng to'"
+      >
+        <app-icon [name]="zoomed() ? 'zoom-out' : 'zoom-in'" [size]="22" />
+      </button>
+      <button
+        type="button"
+        class="inline-flex h-11 w-11 items-center justify-center rounded-full text-ivory/80 transition-colors hover:bg-ivory/10 hover:text-ivory"
+        (click)="close()"
+        aria-label="Đóng"
+      >
+        <app-icon name="close" [size]="24" />
+      </button>
+    </div>
+  </div>
+
+  <!-- Stage -->
+  <div
+    class="relative flex min-h-0 flex-1 items-center justify-center overflow-hidden px-2 sm:px-20"
+    [class.touch-none]="zoomed()"
+    (click)="onBackdropClick($event)"
+    (touchstart)="onTouchStart($event)"
+    (touchend)="onTouchEnd($event)"
+  >
+    @if (!loaded()) {
+      <span class="absolute h-10 w-10 animate-spin rounded-full border border-champagne/30 border-t-gold" aria-hidden="true"></span>
+    }
+
+    <img
+      [src]="current().src"
+      [alt]="current().alt"
+      draggable="false"
+      class="max-h-full max-w-full select-none object-contain shadow-soft transition-[transform,opacity] duration-500 ease-luxe"
+      [class.cursor-zoom-in]="!zoomed()"
+      [class.cursor-zoom-out]="zoomed()"
+      [class.opacity-0]="!loaded()"
+      [style.transform]="zoomed() ? 'scale(2.2)' : 'scale(1)'"
+      [style.transform-origin]="origin()"
+      (load)="loaded.set(true)"
+      (click)="toggleZoom($event)"
+      (pointermove)="onPointerMove($event)"
+    />
+
+    <!-- Prev / Next -->
+    @if (count() > 1) {
+      <button
+        type="button"
+        class="absolute left-2 top-1/2 inline-flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-ivory/20 bg-ink/40 text-ivory/90 backdrop-blur transition-all hover:border-gold hover:text-gold sm:left-5 sm:h-14 sm:w-14"
+        (click)="prev()"
+        aria-label="Ảnh trước"
+      >
+        <app-icon name="chevron-left" [size]="22" />
+      </button>
+      <button
+        type="button"
+        class="absolute right-2 top-1/2 inline-flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-ivory/20 bg-ink/40 text-ivory/90 backdrop-blur transition-all hover:border-gold hover:text-gold sm:right-5 sm:h-14 sm:w-14"
+        (click)="next()"
+        aria-label="Ảnh tiếp theo"
+      >
+        <app-icon name="chevron-right" [size]="22" />
+      </button>
+    }
+  </div>
+
+  <!-- Caption -->
+  <div class="shrink-0 px-6 py-4 text-center sm:py-5">
+    <p class="font-serif italic text-base text-champagne sm:text-lg">{{ current().alt }}</p>
+    <p class="mt-1 hidden font-sans text-[0.65rem] uppercase tracking-wide2 text-ivory/40 sm:block">
+      ← → để chuyển ảnh · Esc để đóng · Click để phóng to
+    </p>
+  </div>
+</div>

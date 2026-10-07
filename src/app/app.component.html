@@ -1,0 +1,36 @@
+@if (store.error(); as error) {
+  <!-- Error state -->
+  <div class="fixed inset-0 z-[80] flex flex-col items-center justify-center bg-ivory px-6 text-center">
+    <p class="font-serif italic text-xl text-mocha">{{ error }}</p>
+    <button type="button" class="btn-outline mt-8" (click)="retry()">Thử lại</button>
+  </div>
+} @else if (!store.ready()) {
+  <!-- Preloader -->
+  <div class="fixed inset-0 z-[80] flex flex-col items-center justify-center bg-ivory" @loader aria-busy="true" aria-label="Đang tải">
+    <span class="relative inline-flex h-16 w-16 items-center justify-center rounded-full border border-champagne-dark/60">
+      <span class="absolute inset-0 rounded-full border border-gold/60 animate-pulse-ring" aria-hidden="true"></span>
+      <span class="h-3 w-3 rotate-45 border border-gold bg-ivory" aria-hidden="true"></span>
+    </span>
+    <span class="mt-6 h-px w-16 origin-left bg-gold/70 animate-line-grow" aria-hidden="true"></span>
+  </div>
+} @else {
+  @if (!opened()) {
+    <app-cover
+      @cover
+      [config]="store.config()!"
+      [couple]="store.couple()!"
+      [guestName]="guestName()"
+      (opened)="openInvitation()"
+    />
+  }
+
+  @if (opened()) {
+    <div @main>
+      <app-nav [monogram]="store.config()!.couple.monogram" [displayDate]="store.config()!.wedding.displayDate" />
+      <app-main-page [guestName]="guestName()" />
+      <app-music-button />
+    </div>
+  }
+}
+
+<app-toast />

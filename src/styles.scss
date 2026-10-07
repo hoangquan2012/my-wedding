@@ -1,0 +1,191 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ------------------------------------------------------------------
+   Base
+------------------------------------------------------------------- */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  html,
+  body {
+    @apply bg-ivory text-cocoa;
+    overflow-x: hidden;
+  }
+
+  body {
+    @apply font-sans antialiased;
+    font-feature-settings: 'kern' 1, 'liga' 1;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    @apply bg-champagne text-ink;
+  }
+
+  img {
+    @apply block max-w-full;
+  }
+
+  button,
+  a {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-gold/70 ring-offset-2 ring-offset-ivory;
+  }
+
+  /* Hidden scrollbar polish (desktop only) */
+  @media (min-width: 1024px) {
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+    ::-webkit-scrollbar-track {
+      @apply bg-cream;
+    }
+    ::-webkit-scrollbar-thumb {
+      @apply bg-champagne-dark rounded-full border-2 border-cream;
+    }
+  }
+
+  section[id] {
+    scroll-margin-top: 4rem;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Components
+------------------------------------------------------------------- */
+@layer components {
+  .container-luxe {
+    @apply mx-auto w-full max-w-content px-5 sm:px-8 lg:px-12;
+  }
+
+  .eyebrow {
+    @apply font-sans text-[0.68rem] sm:text-xs uppercase tracking-luxe text-gold;
+  }
+
+  .heading-display {
+    @apply font-display font-normal leading-[1.05] text-ink;
+  }
+
+  .heading-serif {
+    @apply font-serif font-medium leading-tight text-ink;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 font-sans text-xs sm:text-[0.8rem] uppercase tracking-wide2
+      min-h-[48px] px-7 sm:px-9 transition-all duration-500 ease-luxe select-none;
+  }
+
+  .btn-outline {
+    @apply btn border border-gold text-cocoa hover:bg-gold hover:text-ivory hover:shadow-card;
+  }
+
+  .btn-outline-light {
+    @apply btn border border-ivory/70 text-ivory hover:bg-ivory hover:text-ink;
+  }
+
+  .btn-solid {
+    @apply btn bg-ink text-ivory hover:bg-gold-dark hover:shadow-card;
+  }
+
+  .btn-gold {
+    @apply btn bg-gold text-ivory hover:bg-gold-dark hover:shadow-card;
+  }
+
+  .btn:disabled,
+  .btn[aria-disabled='true'] {
+    @apply opacity-50 cursor-not-allowed hover:shadow-none;
+  }
+
+  .input-luxe {
+    @apply w-full bg-transparent border-0 border-b border-champagne-dark/70 px-0 py-3 font-sans text-base text-ink
+      placeholder:text-taupe/80 focus:border-gold focus:ring-0 transition-colors duration-300;
+  }
+
+  .input-luxe.ng-invalid.ng-touched {
+    @apply border-red-400/80;
+  }
+
+  .divider-line {
+    @apply h-px w-16 bg-gold/70;
+  }
+
+  .card-luxe {
+    @apply bg-ivory border border-champagne/70 shadow-card;
+  }
+
+  .img-skeleton {
+    background: linear-gradient(100deg, #efe5d5 30%, #f7f1e6 50%, #efe5d5 70%);
+    background-size: 200% 100%;
+    @apply animate-shimmer;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Scroll reveal (driven by RevealDirective)
+------------------------------------------------------------------- */
+.reveal {
+  opacity: 0;
+  transform: translate3d(0, 28px, 0);
+  transition:
+    opacity 1s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 1s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal[data-reveal='fade'] {
+  transform: none;
+}
+
+.reveal[data-reveal='left'] {
+  transform: translate3d(-40px, 0, 0);
+}
+
+.reveal[data-reveal='right'] {
+  transform: translate3d(40px, 0, 0);
+}
+
+.reveal[data-reveal='scale'] {
+  transform: scale(0.94);
+}
+
+.reveal[data-reveal='blur'] {
+  filter: blur(10px);
+  transform: translate3d(0, 12px, 0);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+/* ------------------------------------------------------------------
+   Reduced motion
+------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}

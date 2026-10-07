@@ -1,0 +1,85 @@
+<section [id]="ids.venue" class="relative overflow-hidden bg-cream py-24 sm:py-32">
+  <div class="container-luxe">
+    <app-section-heading [eyebrow]="copy().eyebrow" [title]="copy().title" [subtitle]="copy().subtitle" />
+
+    <div class="mt-16 grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
+      <!-- Photo -->
+      <div class="lg:col-span-6" appReveal="left">
+        <div class="group relative">
+          <div class="pointer-events-none absolute inset-0 translate-x-4 translate-y-4 border border-gold/50 transition-transform duration-700 ease-luxe group-hover:translate-x-5 group-hover:translate-y-5"></div>
+          <div class="relative overflow-hidden">
+            <app-img
+              [src]="venue().image"
+              [alt]="venue().name"
+              class="aspect-[4/3] w-full transition-transform duration-[1400ms] ease-luxe group-hover:scale-105"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Details -->
+      <div class="flex flex-col lg:col-span-6" appReveal="right" [revealDelay]="120">
+        <h3 class="heading-display text-3xl sm:text-4xl">{{ venue().name }}</h3>
+
+        <p class="mt-5 flex items-start gap-3 font-sans text-base text-cocoa/80">
+          <app-icon name="map-pin" [size]="20" class="mt-0.5 shrink-0 text-gold" />
+          <span>{{ venue().address }}</span>
+        </p>
+
+        @if (events().length) {
+          <ul class="mt-4 space-y-2">
+            @for (event of events(); track event.id) {
+              <li class="flex items-start gap-3 font-sans text-base text-cocoa/80">
+                <app-icon name="clock" [size]="20" class="mt-0.5 shrink-0 text-gold" />
+                <span><span class="font-medium text-ink">{{ event.title }}</span> · {{ event.time }} — {{ event.dateLabel }}</span>
+              </li>
+            }
+          </ul>
+        }
+
+        @if (venue().phone) {
+          <p class="mt-2 flex items-start gap-3 font-sans text-base text-cocoa/80">
+            <app-icon name="phone" [size]="20" class="mt-0.5 shrink-0 text-gold" />
+            <a [href]="'tel:' + venue().phone" class="hover:text-ink">{{ venue().phone }}</a>
+          </p>
+        }
+
+        <p class="mt-6 font-sans text-[0.95rem] leading-relaxed text-cocoa/80">{{ venue().description }}</p>
+
+        @if (venue().note) {
+          <p class="mt-4 border-l border-gold/60 pl-4 font-serif italic text-base text-mocha">{{ venue().note }}</p>
+        }
+
+        <div class="mt-9 flex flex-wrap gap-3">
+          <a [href]="venue().mapUrl" target="_blank" rel="noopener noreferrer" class="btn-solid">
+            <app-icon name="map-pin" [size]="16" />
+            Xem Google Maps
+          </a>
+          <a [href]="venue().directionsUrl" target="_blank" rel="noopener noreferrer" class="btn-outline">
+            <app-icon name="directions" [size]="16" />
+            Chỉ đường
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Map -->
+    <div class="mt-16" appReveal [revealDelay]="100">
+      <div class="relative overflow-hidden border border-champagne/70 bg-sand shadow-card">
+        @defer (on viewport) {
+          <iframe
+            [src]="venue().mapEmbedUrl | safeUrl"
+            [title]="'Bản đồ: ' + venue().name"
+            class="h-[22rem] w-full grayscale-[35%] sepia-[18%] transition-[filter] duration-700 hover:grayscale-0 hover:sepia-0 sm:h-[28rem]"
+            style="border: 0"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            allowfullscreen
+          ></iframe>
+        } @placeholder {
+          <div class="img-skeleton h-[22rem] w-full sm:h-[28rem]"></div>
+        }
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,88 @@
+<section [id]="ids.gallery" class="relative bg-ivory py-24 sm:py-32">
+  <div class="container-luxe">
+    <app-section-heading [eyebrow]="copy().eyebrow" [title]="copy().title" [subtitle]="copy().subtitle" />
+
+    <!-- Category filters -->
+    @if (categories().length > 1) {
+      <div class="mt-12 flex flex-wrap justify-center gap-2 sm:gap-3" appReveal [revealDelay]="200" role="tablist" aria-label="Bộ lọc ảnh">
+        @for (cat of categories(); track cat.id) {
+          <button
+            type="button"
+            role="tab"
+            class="min-h-[44px] rounded-full border px-5 font-sans text-[0.7rem] uppercase tracking-wide2 transition-all duration-500 ease-luxe"
+            [class]="category() === cat.id ? 'border-ink bg-ink text-ivory' : 'border-champagne-dark/70 text-cocoa hover:border-gold hover:text-ink'"
+            [attr.aria-selected]="category() === cat.id"
+            (click)="selectCategory(cat.id)"
+          >
+            {{ cat.label }}
+          </button>
+        }
+      </div>
+    }
+
+    <!-- Editorial grid -->
+    <div
+      class="mt-12 grid grid-flow-dense grid-cols-2 gap-2 auto-rows-[9.5rem] sm:gap-3 sm:auto-rows-[12rem] md:grid-cols-4 md:gap-4 md:auto-rows-[13rem] lg:auto-rows-[15rem]"
+    >
+      @for (photo of photos(); track photo.id; let i = $index) {
+        <button
+          type="button"
+          class="group relative overflow-hidden bg-sand text-left"
+          [class]="spanClass(i)"
+          (click)="openLightbox(i)"
+          [attr.aria-label]="'Xem ảnh ' + (i + 1) + ': ' + photo.alt"
+          appReveal="scale"
+          [revealDelay]="(i % 8) * 60"
+        >
+          <div class="absolute inset-0">
+            <app-img
+              [src]="photo.thumb || photo.src"
+              [alt]="photo.alt"
+              class="h-full w-full transition-transform duration-[1400ms] ease-luxe group-hover:scale-105"
+            />
+          </div>
+          <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/60 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"></div>
+          <div class="pointer-events-none absolute inset-x-0 bottom-0 translate-y-3 p-4 opacity-0 transition-all duration-500 ease-luxe group-hover:translate-y-0 group-hover:opacity-100">
+            <p class="line-clamp-1 font-serif italic text-sm text-ivory sm:text-base">{{ photo.alt }}</p>
+          </div>
+        </button>
+      }
+
+      @if (loading()) {
+        @for (s of skeletons; track s) {
+          <div class="img-skeleton" [class]="spanClass(photos().length + s)" aria-hidden="true"></div>
+        }
+      }
+    </div>
+
+    <!-- Status / load more -->
+    <div class="mt-12 flex flex-col items-center gap-5">
+      @if (error()) {
+        <p class="font-sans text-sm text-red-700">{{ error() }}</p>
+        <button type="button" class="btn-outline" (click)="retry()">Thử lại</button>
+      } @else {
+        @if (total() > 0) {
+          <p class="font-sans text-[0.7rem] uppercase tracking-wide2 text-taupe">{{ photos().length }} / {{ total() }} ảnh</p>
+        }
+        @if (hasMore()) {
+          <button type="button" class="btn-outline" (click)="loadMore()" [disabled]="loading()">
+            {{ loading() ? 'Đang tải…' : 'Xem thêm ảnh' }}
+          </button>
+        }
+        @if (!loading() && photos().length === 0) {
+          <p class="font-serif italic text-lg text-mocha">Chưa có ảnh trong mục này.</p>
+        }
+      }
+    </div>
+  </div>
+
+  @if (lightboxIndex() !== null) {
+    <app-lightbox
+      @fade
+      [photos]="photos()"
+      [index]="lightboxIndex()!"
+      (indexChange)="lightboxIndex.set($event)"
+      (closed)="closeLightbox()"
+    />
+  }
+</section>

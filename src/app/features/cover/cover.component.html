@@ -1,0 +1,58 @@
+<section class="absolute inset-0 overflow-hidden bg-ink text-ivory" aria-label="Thiệp mời">
+  <!-- Background -->
+  <div class="absolute inset-0">
+    <img
+      [src]="config().cover.backgroundImage"
+      alt=""
+      fetchpriority="high"
+      decoding="async"
+      class="h-full w-full object-cover animate-slow-zoom"
+    />
+    <div class="absolute inset-0 bg-gradient-to-b from-ink/55 via-ink/30 to-ink/85"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_35%,rgba(43,36,30,0.55)_100%)]"></div>
+  </div>
+
+  <!-- Invitation frame -->
+  <div class="pointer-events-none absolute inset-4 sm:inset-8 border border-champagne/30 animate-fade-in [animation-delay:700ms]"></div>
+  <div class="pointer-events-none absolute inset-6 sm:inset-10 border border-champagne/15 animate-fade-in [animation-delay:1000ms]"></div>
+
+  <!-- Content -->
+  <div class="relative z-10 flex h-full flex-col items-center justify-center px-8 text-center">
+    <p class="eyebrow !text-champagne animate-fade-up [animation-delay:200ms]">{{ config().cover.eyebrow }}</p>
+
+    <app-ornament tone="light" class="mt-5 animate-fade-up [animation-delay:400ms]" />
+
+    <h1 class="mt-8 heading-display !text-ivory text-[2.1rem] sm:text-6xl lg:text-7xl text-balance animate-fade-up [animation-delay:600ms]">
+      {{ couple()[0].fullName }}
+    </h1>
+    <span class="my-2 sm:my-4 font-script text-5xl sm:text-7xl text-gold-light animate-fade-up [animation-delay:800ms]" aria-hidden="true">&amp;</span>
+    <h1 class="heading-display !text-ivory text-[2.1rem] sm:text-6xl lg:text-7xl text-balance animate-fade-up [animation-delay:1000ms]">
+      {{ couple()[1].fullName }}
+    </h1>
+
+    <p class="mt-8 font-serif text-xl sm:text-2xl tracking-[0.3em] text-champagne animate-fade-up [animation-delay:1200ms]">
+      {{ config().wedding.displayDate }}
+    </p>
+
+    @if (guestName(); as guest) {
+      <div class="mt-8 animate-fade-up [animation-delay:1400ms]">
+        <p class="eyebrow !text-champagne/80">{{ config().cover.guestGreeting }}</p>
+        <p class="mt-2 font-serif text-2xl sm:text-3xl text-ivory">{{ guest }}</p>
+      </div>
+    }
+
+    <button
+      type="button"
+      class="btn-outline-light group relative mt-10 sm:mt-12 animate-fade-up [animation-delay:1600ms]"
+      (click)="open()"
+    >
+      <span class="pointer-events-none absolute inset-0 border border-ivory/40 animate-pulse-ring" aria-hidden="true"></span>
+      <span class="relative">{{ config().cover.buttonLabel }}</span>
+    </button>
+  </div>
+
+  <!-- Bottom caption -->
+  <p class="absolute inset-x-0 bottom-6 sm:bottom-10 text-center font-serif italic text-sm sm:text-base text-champagne/70 animate-fade-in [animation-delay:2000ms]">
+    {{ config().wedding.city }}
+  </p>
+</section>

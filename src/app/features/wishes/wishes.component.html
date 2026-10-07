@@ -1,0 +1,97 @@
+<section [id]="ids.wishes" class="relative overflow-hidden bg-cream py-24 sm:py-32">
+  <div class="container-luxe">
+    <app-section-heading [eyebrow]="wishesCopy().eyebrow" [title]="wishesCopy().title" [subtitle]="wishesCopy().subtitle" />
+
+    <div class="mt-16 grid gap-10 lg:grid-cols-12 lg:gap-14">
+      <!-- Form -->
+      <div class="lg:col-span-5" appReveal="left" [revealDelay]="150">
+        <form class="card-luxe relative flex flex-col gap-7 px-6 py-9 sm:px-9 sm:py-11 lg:sticky lg:top-28" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+          <div class="pointer-events-none absolute inset-2.5 border border-gold/40" aria-hidden="true"></div>
+
+          <div class="relative">
+            <label for="wish-name" class="eyebrow block">Tên của bạn <span class="text-red-500">*</span></label>
+            <input
+              id="wish-name"
+              type="text"
+              formControlName="name"
+              class="input-luxe mt-2"
+              placeholder="Bạn là ai?"
+              autocomplete="name"
+              [attr.aria-invalid]="hasError('name')"
+            />
+            @if (hasError('name')) {
+              <p class="mt-2 font-sans text-xs text-red-600">Vui lòng nhập tên (2–60 ký tự).</p>
+            }
+          </div>
+
+          <div class="relative">
+            <div class="flex items-baseline justify-between">
+              <label for="wish-message" class="eyebrow block">Lời chúc <span class="text-red-500">*</span></label>
+              <span class="font-sans text-[0.65rem] tabular-nums text-taupe">{{ messageLength() }}/600</span>
+            </div>
+            <textarea
+              id="wish-message"
+              formControlName="message"
+              rows="5"
+              class="input-luxe mt-2 resize-none"
+              placeholder="Gửi đôi lời yêu thương đến cô dâu chú rể…"
+              [attr.aria-invalid]="hasError('message')"
+            ></textarea>
+            @if (hasError('message')) {
+              <p class="mt-2 font-sans text-xs text-red-600">Lời chúc cần từ 4 đến 600 ký tự.</p>
+            }
+          </div>
+
+          <button type="submit" class="btn-gold relative w-full" [disabled]="submitting()">
+            @if (submitting()) {
+              <span class="h-4 w-4 animate-spin rounded-full border border-ivory/40 border-t-ivory" aria-hidden="true"></span>
+              Đang gửi…
+            } @else {
+              <app-icon name="heart" [size]="16" />
+              Gửi lời chúc
+            }
+          </button>
+        </form>
+      </div>
+
+      <!-- List -->
+      <div class="lg:col-span-7" appReveal="right" [revealDelay]="250">
+        @if (loading()) {
+          <div class="grid gap-5 sm:grid-cols-2">
+            @for (s of [0, 1, 2, 3]; track s) {
+              <div class="img-skeleton h-40" aria-hidden="true"></div>
+            }
+          </div>
+        } @else if (wishes().length === 0) {
+          <p class="font-serif italic text-xl text-mocha">Hãy là người đầu tiên gửi lời chúc!</p>
+        } @else {
+          <p class="mb-6 font-sans text-[0.7rem] uppercase tracking-wide2 text-taupe">{{ wishes().length }} lời chúc</p>
+
+          <div class="columns-1 gap-5 sm:columns-2">
+            @for (wish of visible(); track wish.id) {
+              <article class="card-luxe mb-5 break-inside-avoid px-6 py-6" @wish>
+                <div class="flex items-center gap-3">
+                  <span class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-champagne font-serif text-sm text-cocoa">
+                    {{ initials(wish.name) }}
+                  </span>
+                  <div class="min-w-0">
+                    <p class="truncate font-serif text-lg text-ink">{{ wish.name }}</p>
+                    <p class="font-sans text-[0.65rem] uppercase tracking-wide2 text-taupe">{{ wish.createdAt | timeAgo }}</p>
+                  </div>
+                  <app-icon name="quote" [size]="22" class="ml-auto shrink-0 text-champagne-dark" />
+                </div>
+                <p class="mt-4 font-sans text-[0.95rem] leading-relaxed text-cocoa/85">{{ wish.message }}</p>
+              </article>
+            }
+          </div>
+
+          @if (hasMore()) {
+            <div class="mt-4 flex justify-center">
+              <button type="button" class="btn-outline" (click)="showMore()">Xem thêm lời chúc</button>
+            </div>
+          }
+        }
+      </div>
+    </div>
+  </div>
+</section>

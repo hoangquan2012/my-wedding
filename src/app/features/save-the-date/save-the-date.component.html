@@ -1,0 +1,50 @@
+<section [id]="ids.saveTheDate" class="relative overflow-hidden bg-ivory py-24 sm:py-32">
+  <!-- soft decorative glow -->
+  <div class="pointer-events-none absolute -top-40 left-1/2 h-[32rem] w-[32rem] -translate-x-1/2 rounded-full bg-champagne/30 blur-3xl"></div>
+
+  <div class="container-luxe relative flex flex-col items-center text-center">
+    <p class="eyebrow" appReveal="fade">{{ copy().eyebrow }}</p>
+    <app-ornament class="mt-4" appReveal="fade" [revealDelay]="100" />
+
+    <!-- Big date -->
+    <div class="mt-10 flex flex-col items-center" appReveal [revealDelay]="150">
+      <span class="font-display text-[6.5rem] leading-none text-ink sm:text-[9rem] lg:text-[11rem]">{{ day() }}</span>
+      <span class="mt-2 font-sans text-sm uppercase tracking-luxe text-gold sm:text-base">{{ month() }}</span>
+      <span class="mt-3 font-serif text-3xl text-cocoa sm:text-4xl">{{ year() }}</span>
+    </div>
+
+    <p class="mt-6 font-serif italic text-xl text-mocha sm:text-2xl" appReveal [revealDelay]="250">
+      {{ weekday() }} <span class="mx-2 text-gold">·</span> {{ weekdayVi() }} <span class="mx-2 text-gold">·</span> {{ timeLabel() }}
+    </p>
+
+    <h2 class="mt-4 heading-serif text-2xl text-cocoa sm:text-3xl text-balance" appReveal [revealDelay]="300">{{ copy().title }}</h2>
+
+    <!-- Countdown -->
+    @if (!countdown().finished) {
+      <div class="mt-14 grid w-full max-w-3xl grid-cols-2 gap-4 sm:grid-cols-4 sm:gap-6" appReveal [revealDelay]="350" role="timer" aria-live="off">
+        @for (unit of units(); track unit.label) {
+          <div class="card-luxe flex flex-col items-center px-4 py-7 sm:py-9">
+            <span class="font-display text-4xl tabular-nums text-ink sm:text-5xl lg:text-6xl">{{ pad(unit.value) }}</span>
+            <span class="mt-3 font-sans text-[0.65rem] uppercase tracking-luxe text-gold sm:text-xs">{{ unit.label }}</span>
+            <span class="mt-1 font-serif italic text-sm text-taupe">{{ unit.labelVi }}</span>
+          </div>
+        }
+      </div>
+    } @else {
+      <p class="mt-14 font-script text-4xl text-gold sm:text-5xl" appReveal>Just Married</p>
+      <p class="mt-3 font-serif italic text-xl text-mocha" appReveal [revealDelay]="100">Chúng mình đã chính thức về chung một nhà.</p>
+    }
+
+    <a
+      [href]="calendarUrl()"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="btn-outline mt-12"
+      appReveal
+      [revealDelay]="450"
+    >
+      <app-icon name="calendar" [size]="18" />
+      Thêm vào lịch
+    </a>
+  </div>
+</section>

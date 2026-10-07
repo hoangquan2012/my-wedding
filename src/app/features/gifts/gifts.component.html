@@ -1,0 +1,90 @@
+<section [id]="ids.gifts" class="relative overflow-hidden bg-cream py-24 sm:py-32">
+  <div class="pointer-events-none absolute -left-32 top-10 h-[26rem] w-[26rem] rounded-full bg-champagne/40 blur-3xl"></div>
+
+  <div class="container-luxe relative">
+    <app-section-heading [eyebrow]="gift().eyebrow" [title]="gift().title" [subtitle]="gift().subtitle" />
+
+    <p class="mx-auto mt-8 max-w-prose text-center font-sans text-[0.95rem] leading-relaxed text-cocoa/80 sm:text-base" appReveal [revealDelay]="300">
+      {{ gift().message }}
+    </p>
+
+    <div class="mx-auto mt-14 grid max-w-4xl gap-6 md:grid-cols-2 md:gap-8">
+      @for (account of accounts(); track account.id; let i = $index) {
+        <article
+          class="card-luxe relative flex flex-col items-center px-7 py-10 text-center sm:px-9 sm:py-12"
+          [appReveal]="i % 2 === 0 ? 'left' : 'right'"
+          [revealDelay]="i * 120"
+        >
+          <span class="pointer-events-none absolute left-3 top-3 h-6 w-6 border-l border-t border-gold/60" aria-hidden="true"></span>
+          <span class="pointer-events-none absolute bottom-3 right-3 h-6 w-6 border-b border-r border-gold/60" aria-hidden="true"></span>
+
+          <p class="eyebrow">{{ roleLabel(account) }}</p>
+          <h3 class="heading-display mt-3 text-2xl sm:text-3xl">{{ account.owner }}</h3>
+
+          <div class="my-6 h-px w-14 bg-gold/50"></div>
+
+          <p class="font-sans text-xs uppercase tracking-wide2 text-taupe">{{ account.bankShort }}</p>
+          <p class="mt-1 font-sans text-xs text-cocoa/60">{{ account.bank }}</p>
+          <p class="mt-4 font-serif text-2xl tabular-nums tracking-[0.12em] text-ink sm:text-3xl">
+            {{ formatAccount(account.accountNumber) }}
+          </p>
+
+          <!-- Small QR preview -->
+          <button
+            type="button"
+            class="group mt-7 inline-flex h-28 w-28 items-center justify-center overflow-hidden border border-champagne-dark/60 bg-ivory p-2 transition-colors hover:border-gold"
+            (click)="openQr(account)"
+            aria-label="Phóng to mã QR"
+          >
+            <app-img [src]="account.qrImage" [alt]="'QR ' + account.owner" fit="contain" class="h-full w-full !bg-ivory transition-transform duration-500 group-hover:scale-105" />
+          </button>
+
+          <div class="mt-7 flex flex-wrap justify-center gap-3">
+            <button type="button" class="btn-solid" (click)="openQr(account)">
+              <app-icon name="qr" [size]="16" />
+              Hiện QR
+            </button>
+            <button type="button" class="btn-outline" (click)="copy(account)">
+              <app-icon name="copy" [size]="16" />
+              Sao chép STK
+            </button>
+          </div>
+        </article>
+      }
+    </div>
+  </div>
+
+  <!-- QR modal -->
+  <app-modal [open]="selected() !== null" (closed)="closeQr()" title="Mã QR chuyển khoản">
+    @if (selected(); as account) {
+      <div class="flex flex-col items-center text-center">
+        <p class="eyebrow">{{ roleLabel(account) }}</p>
+        <h3 class="heading-display mt-3 text-2xl sm:text-3xl">{{ account.owner }}</h3>
+
+        <div class="mt-7 w-full max-w-[18rem] border border-champagne-dark/60 bg-ivory p-3">
+          <app-img [src]="account.qrImage" [alt]="'QR ' + account.owner" fit="contain" class="aspect-square w-full !bg-ivory" />
+        </div>
+
+        <dl class="mt-7 w-full space-y-3 text-left">
+          <div class="flex items-baseline justify-between gap-4 border-b border-champagne/70 pb-3">
+            <dt class="font-sans text-[0.7rem] uppercase tracking-wide2 text-taupe">Ngân hàng</dt>
+            <dd class="text-right font-sans text-sm text-ink">{{ account.bankShort }}</dd>
+          </div>
+          <div class="flex items-baseline justify-between gap-4 border-b border-champagne/70 pb-3">
+            <dt class="font-sans text-[0.7rem] uppercase tracking-wide2 text-taupe">Chủ tài khoản</dt>
+            <dd class="text-right font-sans text-sm text-ink">{{ account.owner }}</dd>
+          </div>
+          <div class="flex items-baseline justify-between gap-4 pb-1">
+            <dt class="font-sans text-[0.7rem] uppercase tracking-wide2 text-taupe">Số tài khoản</dt>
+            <dd class="text-right font-serif text-xl tabular-nums tracking-[0.1em] text-ink">{{ formatAccount(account.accountNumber) }}</dd>
+          </div>
+        </dl>
+
+        <button type="button" class="btn-solid mt-7 w-full" (click)="copy(account)">
+          <app-icon name="copy" [size]="16" />
+          Copy số tài khoản
+        </button>
+      </div>
+    }
+  </app-modal>
+</section>
